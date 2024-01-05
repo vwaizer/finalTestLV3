@@ -15,19 +15,22 @@ class DataBaseService {
     run() {
     try {
            this.client.connect();
-    //   const users = database.collection("user");
-    //   const query = { title: "Back to the Future" };
-    //   const movie = await users.findOne(query);
+   
         
     } catch(error) {
-      // Ensures that the client will close when you finish/error
+     
       console.log("error",error);
     }
   }
-   test1(){
-    return this.db.collection("test1");
+   order(){
+    return this.db.collection("Order");
   }
- 
+  user(){
+    return this.db.collection("User");
+  }
+  inventory(){
+    return this.db.collection("inventory");
+  }
 }
 
 export const databaseUnit=new DataBaseService();
