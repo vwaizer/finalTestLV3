@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { FaCircle, FaCheckCircle } from "react-icons/fa";
 
-const TodoList = () => {
+const TodoList = (props) => {
+  console.log(props.changeVal);
+  let a= JSON.parse(localStorage.getItem("taskList"));
   const [taskList, setTaskList] = useState(
-    JSON.parse(localStorage.getItem("taskList")) || []
+    a || []
   );
-
+useEffect(()=>{
+  setTaskList(JSON.parse(localStorage.getItem("taskList")))
+},[props.changeVal])
   useEffect(() => {
+  
     const handleStorageChange = (event) => {
       if (event.key === "taskList") {
         setTaskList(JSON.parse(event.newValue));
@@ -21,16 +26,21 @@ const TodoList = () => {
   }, []);
 
   useEffect(() => {
+  
     localStorage.setItem("taskList", JSON.stringify(taskList));
+    
   }, [taskList]);
 
   const handleTaskStatusChange = (index) => {
+  
     const updatedTaskList = [...taskList];
     updatedTaskList[index] = {
       ...updatedTaskList[index],
       status: !updatedTaskList[index].status,
     };
+    
     setTaskList(updatedTaskList);
+   
   };
 
   return (

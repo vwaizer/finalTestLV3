@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-const Form = () => {
+const Form = (props) => {
+  console.log(props.changeVal);
   const [task, setTask] = useState("");
   const [taskList, setTaskList] = useState(
     JSON.parse(localStorage.getItem("taskList")) || []
@@ -20,7 +21,8 @@ const Form = () => {
     setTaskList(updatedTaskList);
     localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
     setTask("");
-  };
+    props.method(!props.changeVal) ;
+   };
 
   return (
     <form className="form" onSubmit={handleSubmit}>
