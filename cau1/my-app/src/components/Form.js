@@ -1,38 +1,40 @@
 import React, { useState } from "react";
 
+
 const Form = (props) => {
   console.log(props.changeVal);
-  const [task, setTask] = useState("");
-  const [taskList, setTaskList] = useState(
-    JSON.parse(localStorage.getItem("taskList")) || []
-  );
-
-  const handleInputChange = (event) => {
-    setTask(event.target.value);
+  const [inputVal, setInputVal] = useState("");
+  let initValue = [];
+  if (JSON.parse(localStorage.getItem("data")) != null) {
+    initValue = JSON.parse(localStorage.getItem("data"));
+  }
+  const [taskList, setTaskList] = useState(initValue);
+ 
+  const inputFunc = (event) => {
+    setInputVal(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const submitFunc = (event) => {
     event.preventDefault();
     const newTask = {
-      title: task,
-      status: false,
+      value: inputVal,
+      isCheck: false,
     };
-    const updatedTaskList = [...taskList, newTask];
-    setTaskList(updatedTaskList);
-    localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
-    setTask("");
-    props.method(!props.changeVal) ;
-   };
+    const result = [...taskList, newTask];
+    setTaskList(result);
+    localStorage.setItem("data", JSON.stringify(result));
+    setInputVal("");
+    props.method(!props.changeVal);
+  };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <input
-        placeholder="Enter task ..."
-        value={task}
-        onChange={handleInputChange}
-      />
-      <button>Submit</button>
+    
+    <>
+    <form className="form" onSubmit={submitFunc}>
+      <input placeholder="" value={inputVal} onChange={inputFunc} />
+      <button type="submit">{props.language === true ? `submit` : "Nộp" }</button>
     </form>
+    </>
   );
 };
 

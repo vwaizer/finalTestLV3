@@ -1,83 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { FaCircle, FaCheckCircle } from "react-icons/fa";
+import { TodoItem } from "./ToDoItem";
 
 const TodoList = (props) => {
   console.log(props.changeVal);
-  let a= JSON.parse(localStorage.getItem("taskList"));
-  const [taskList, setTaskList] = useState(
-    a || []
-  );
-useEffect(()=>{
-  setTaskList(JSON.parse(localStorage.getItem("taskList")))
-},[props.changeVal])
+  let initValue = JSON.parse(localStorage.getItem("data"));
+  if(initValue == null){
+    initValue=[]
+  }
+  const [taskList, setTaskList] = useState(initValue);
   useEffect(() => {
-  
-    const handleStorageChange = (event) => {
-      if (event.key === "taskList") {
+    setTaskList(JSON.parse(localStorage.getItem("data")));
+  }, [props.changeVal]);
+  useEffect(() => {
+    const addStorage = (event) => {
+      if (event.key === "data") {
         setTaskList(JSON.parse(event.newValue));
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("storage", addStorage);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("storage", addStorage);
     };
   }, []);
 
   useEffect(() => {
-  
-    localStorage.setItem("taskList", JSON.stringify(taskList));
-    
+    localStorage.setItem("data", JSON.stringify(taskList));
   }, [taskList]);
 
-  const handleTaskStatusChange = (index) => {
-  
+  const setList = (index) => {
     const updatedTaskList = [...taskList];
-    updatedTaskList[index] = {
-      ...updatedTaskList[index],
-      status: !updatedTaskList[index].status,
-    };
-    
+    updatedTaskList[index].isCheck=!updatedTaskList[index].isCheck
+
     setTaskList(updatedTaskList);
-   
   };
 
   return (
     <div className="todo-list-container">
       {taskList.length > 0 &&
-        taskList.map((task, index) => (
-          <TodoItem
-            key={index}
-            task={task}
-            index={index}
-            handleTaskStatusChange={handleTaskStatusChange}
-          />
+        taskList.map((item, index) => (
+          <TodoItem key={index} task={item} index={index} Function={setList} />
         ))}
-    </div>
-  );
-};
-
-const TodoItem = ({ task, index, handleTaskStatusChange }) => {
-  return (
-    <div
-      className={`todo-item-container ${task.status ? "done" : ""}`}
-      key={index}
-    >
-      {task.status ? (
-        <FaCheckCircle
-          className="item-done-button"
-          color="#9a9a9a"
-          onClick={() => handleTaskStatusChange(index)}
-        />
-      ) : (
-        <FaCircle
-          className="item-done-button"
-          color="#9a9a9a"
-          onClick={() => handleTaskStatusChange(index)}
-        />
-      )}
-      <div className="item-title">{task.title}</div>
     </div>
   );
 };

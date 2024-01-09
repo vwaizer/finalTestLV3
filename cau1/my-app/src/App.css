@@ -49,10 +49,12 @@ body,
 .todo-item-container {
   border-bottom: 1px solid #ececec;
   padding: 10px;
-  font-size: 24px;
-  font-weight: 100;
+  font-size: 23px;
+  font-weight: 200;
   display: flex;
   align-items: center;
+  color: blue;
+  
 }
 
 .todo-item-container.done {
